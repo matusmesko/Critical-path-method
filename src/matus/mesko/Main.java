@@ -13,8 +13,8 @@ public class Main {
         String dataFilePath = "src/matus/mesko/data/CPM_mini.hrn";
         
         // Parse the input file and build the project network
-        Map<Integer, Vrchol> activities = new HashMap<>();
-        Map<Vrchol, List<Hrana>> network = new HashMap<>();
+        Map<Integer, Vrchol> vrcholy = new HashMap<>();
+        Map<Vrchol, List<Hrana>> graf = new HashMap<>();
         
         try (Scanner scanner = new Scanner(new File(dataFilePath))) {
             while (scanner.hasNextInt()) {
@@ -23,45 +23,39 @@ public class Main {
                 int duration = scanner.nextInt();
                 
                 // Create activities if they don't exist
-                activities.putIfAbsent(sourceId, new Vrchol(sourceId));
-                activities.putIfAbsent(targetId, new Vrchol(targetId));
+                vrcholy.putIfAbsent(sourceId, new Vrchol(sourceId));
+                vrcholy.putIfAbsent(targetId, new Vrchol(targetId));
                 
                 // Increment in-degree of target activity
-                activities.get(targetId).incrementInDegree();
+                vrcholy.get(targetId).incrementInDegree();
                 
                 // Get the activity objects
-                Vrchol source = activities.get(sourceId);
-                Vrchol target = activities.get(targetId);
+                Vrchol source = vrcholy.get(sourceId);
+                Vrchol target = vrcholy.get(targetId);
                 
                 // Add the edge to the network
-                network.putIfAbsent(source, new ArrayList<>());
-                network.get(source).add(new Hrana(source, target, duration));
+                graf.putIfAbsent(source, new ArrayList<>());
+                graf.get(source).add(new Hrana(source, target, duration));
             }
         } catch (Exception e) {
             throw new RuntimeException("Error reading file " + dataFilePath + ": " + e.getMessage(), e);
         }
         
         // Create the CPM analyzer and run the analysis
-        Graf cpm = new Graf(network);
+        Graf cpm = new Graf(graf);
         
-        // Calculate and display earliest start times
-        String result = cpm.calculateEarliestStartTimes();
-        System.out.println(result);
-        
-        // Calculate and display latest finish times
-        result = cpm.calculateLatestFinishTimes();
-        System.out.println(result);
-        
-        // Calculate and display time reserves
-        result = cpm.calculateTimeReserves();
-        System.out.println(result);
-        
-        // Find and display the critical path
-        result = cpm.findCriticalPath();
-        System.out.println(result);
-        
-        // Display the total project duration
-        int duration = cpm.getProjectDuration();
-        System.out.println("Trvanie projektu: " + duration);
+        print(cpm);
+    }
+
+    private static void print(Graf graf) {
+        System.out.println(graf.calculateEarliestStartTimes());
+        System.out.println("-----------------------------------------");
+        System.out.println(graf.calculateLatestFinishTimes());
+        System.out.println("-----------------------------------------");
+        System.out.println(graf.calculateTimeReserves());
+        System.out.println("-----------------------------------------");
+        System.out.println(graf.findCriticalPath());
+        System.out.println("-----------------------------------------");
+        System.out.println("Trvanie projektu: " + graf.getProjectDuration());
     }
 }
