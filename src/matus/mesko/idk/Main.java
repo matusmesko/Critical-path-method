@@ -12,47 +12,47 @@ public class Main {
     public static void main(String[] args) {
         List<Hrana> zoznamHran = new ArrayList<>();
         List<Vrchol> zoznamVrcholov = new ArrayList<>();
-        int maxVrchol = 0;
+        int pocetVrcholov = 0;
 
         // Cesta k súboru s hranami
-        String cestaHrany = "src/matus/mesko/data/" + NAZOV_SUBORU + ".hrn";
-        try (Scanner citac = new Scanner(new File(cestaHrany))) {
+        String subor = "src/matus/mesko/data/" + NAZOV_SUBORU + ".hrn";
+        try (Scanner citac = new Scanner(new File(subor))) {
             while (citac.hasNextInt()) {
                 int u = citac.nextInt();
                 int v = citac.nextInt();
                 int cena = citac.nextInt();
 
                 zoznamHran.add(new Hrana(u, v, cena));
-                maxVrchol = Math.max(maxVrchol, Math.max(u, v));
+                pocetVrcholov = Math.max(pocetVrcholov, Math.max(u, v));
             }
         } catch (Exception e) {
-            throw new RuntimeException("Nepodarilo sa načítať súbor: " + cestaHrany);
+            throw new RuntimeException("Nepodarilo sa načítať súbor: " + subor);
         }
 
         // Cesta k súboru s časmi činností
-        String cestaCasy = "src/matus/mesko/data/" + NAZOV_SUBORU + ".tim";
-        List<Integer> trvania = new ArrayList<>();
-        trvania.add(0); // Index 0 je rezervovaný pre "virtuálny" počiatočný vrchol
+        String subor2 = "src/matus/mesko/data/" + NAZOV_SUBORU + ".tim";
+        List<Integer> list = new ArrayList<>();
+        list.add(0); // Index 0 je rezervovaný pre "virtuálny" počiatočný vrchol
 
-        try (Scanner citac = new Scanner(new File(cestaCasy))) {
+        try (Scanner citac = new Scanner(new File(subor2))) {
             while (citac.hasNextInt()) {
-                trvania.add(citac.nextInt());
+                list.add(citac.nextInt());
             }
         } catch (Exception e) {
-            throw new RuntimeException("Nepodarilo sa načítať súbor: " + cestaCasy);
+            throw new RuntimeException("Nepodarilo sa načítať súbor: " + subor2);
         }
 
         // Vytvorenie zoznamu vrcholov
-        for (int i = 0; i <= maxVrchol; i++) {
+        for (int i = 0; i <= pocetVrcholov; i++) {
             Vrchol vrchol = new Vrchol(i);
-            if (i < trvania.size()) {
-                vrchol.setTrvanie(trvania.get(i));
+            if (i < list.size()) {
+                vrchol.setTrvanie(list.get(i));
             }
             zoznamVrcholov.add(vrchol);
         }
 
         // Spustenie výpočtu CPM
         Graf graf = new Graf(new ArrayList<>(zoznamHran), new ArrayList<>(zoznamVrcholov));
-        graf.vypocitajCPM(); // alebo .vypocitajCPM() podľa tvojej finálnej metódy
+        graf.vypocitajCPM();
     }
 }

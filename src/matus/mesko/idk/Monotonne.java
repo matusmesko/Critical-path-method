@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Monotonne {
 
-    public ArrayList<Vrchol> getTopologicalOrdering(ArrayList<Vrchol> vrcholy) {
+    public ArrayList<Vrchol> monotonneOcisluj(ArrayList<Vrchol> vrcholy) {
         ArrayList<Vrchol> list = new ArrayList<>();
         // pole pre vsetky vrcholy
         int[] inDeg = new int[vrcholy.size()];

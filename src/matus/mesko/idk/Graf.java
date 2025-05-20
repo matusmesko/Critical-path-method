@@ -1,7 +1,6 @@
 package matus.mesko.idk;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Graf {
 
@@ -24,7 +23,7 @@ public class Graf {
     public void vypocitajCPM() {
         int pocitadlo = 0;
         Monotonne monotonne = new Monotonne();
-        ArrayList<Vrchol> zoradene = monotonne.getTopologicalOrdering(this.vrcholy); // zoradim monotonne
+        ArrayList<Vrchol> zoradene = monotonne.monotonneOcisluj(this.vrcholy); // zoradim monotonne
         int[] zaciatok = new int[zoradene.size()];
         int[] koniec = new int[zoradene.size()];
         int[] trvanie = new int[zoradene.size()];
