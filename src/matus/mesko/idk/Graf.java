@@ -88,7 +88,6 @@ public class Graf {
     }
 
     private void vypisZoradeneVTabulke(ArrayList<Vrchol> zoradene, int[] zaciatok, int[] koniec, int[] rezerva) {
-        System.out.println("\nZoradené činnosti:");
         System.out.println("+------------+------------+------------+------------+----------------+");
         System.out.println("| Činnosť    | Trvanie    | Začiatok   | Koniec     | Rezerva        |");
         System.out.println("+------------+------------+------------+------------+----------------+");
@@ -112,9 +111,8 @@ public class Graf {
 
 
     private void vypisNezoradeneVTabulke(int[] zaciatok, int[] koniec, int[] rezerva) {
-        System.out.println("\nNezoradené činnosti:");
         System.out.println("+------------+------------+------------+------------+----------------+");
-        System.out.println("| Činnosť    | Trvanie    | Začiatok   | Koniec     | Rezerva (k-z-p)|");
+        System.out.println("| Činnosť    | Trvanie    | Začiatok   | Koniec     | Rezerva        |");
         System.out.println("+------------+------------+------------+------------+----------------+");
 
         String format = "| %-10d | %-10d | %-10d | %-10d | %-14d |%n";
