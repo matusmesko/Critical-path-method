@@ -1,4 +1,4 @@
-package matus.mesko.idk;
+package matus.mesko.cpm;
 
 import java.util.ArrayList;
 

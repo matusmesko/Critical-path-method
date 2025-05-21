@@ -1,4 +1,4 @@
-package matus.mesko.idk;
+package matus.mesko.cpm;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,9 +12,8 @@ public class Main {
     public static void main(String[] args) {
         List<Hrana> zoznamHran = new ArrayList<>();
         List<Vrchol> zoznamVrcholov = new ArrayList<>();
-        int pocetVrcholov = 0;
+        int najvacsiVrchol = 0;
 
-        // Cesta k súboru s hranami
         String subor = "src/matus/mesko/data/" + NAZOV_SUBORU + ".hrn";
         try (Scanner citac = new Scanner(new File(subor))) {
             while (citac.hasNextInt()) {
@@ -23,16 +22,15 @@ public class Main {
                 int cena = citac.nextInt();
 
                 zoznamHran.add(new Hrana(u, v, cena));
-                pocetVrcholov = Math.max(pocetVrcholov, Math.max(u, v));
+                najvacsiVrchol = Math.max(najvacsiVrchol, Math.max(u, v));
             }
         } catch (Exception e) {
             throw new RuntimeException("Nepodarilo sa načítať súbor: " + subor);
         }
 
-        // Cesta k súboru s časmi činností
         String subor2 = "src/matus/mesko/data/" + NAZOV_SUBORU + ".tim";
         List<Integer> list = new ArrayList<>();
-        list.add(0); // Index 0 je rezervovaný pre "virtuálny" počiatočný vrchol
+        list.add(0);
 
         try (Scanner citac = new Scanner(new File(subor2))) {
             while (citac.hasNextInt()) {
@@ -42,8 +40,7 @@ public class Main {
             throw new RuntimeException("Nepodarilo sa načítať súbor: " + subor2);
         }
 
-        // Vytvorenie zoznamu vrcholov
-        for (int i = 0; i <= pocetVrcholov; i++) {
+        for (int i = 0; i <= najvacsiVrchol; i++) {
             Vrchol vrchol = new Vrchol(i);
             if (i < list.size()) {
                 vrchol.setTrvanie(list.get(i));
@@ -51,7 +48,6 @@ public class Main {
             zoznamVrcholov.add(vrchol);
         }
 
-        // Spustenie výpočtu CPM
         Graf graf = new Graf(new ArrayList<>(zoznamHran), new ArrayList<>(zoznamVrcholov));
         graf.vypocitajCPM();
     }

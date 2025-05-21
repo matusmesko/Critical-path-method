@@ -1,4 +1,4 @@
-package matus.mesko.idk;
+package matus.mesko.cpm;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,6 @@ public class Graf {
         this.hrany = hrany;
         this.vrcholy = vrcholy;
 
-        // pridam vrcholom indegy a outdegy
         for (Hrana hrana : this.hrany) {
             this.vrcholy.get(hrana.getV()).pridajVchadzajucuHranu(hrana);
             this.vrcholy.get(hrana.getU()).pridajVychdazajucuHranu(hrana);
@@ -21,9 +20,9 @@ public class Graf {
     }
 
     public void vypocitajCPM() {
-        int pocitadlo = 0;
+        int najvacsieTrvanie = 0;
         Monotonne monotonne = new Monotonne();
-        ArrayList<Vrchol> zoradene = monotonne.monotonneOcisluj(this.vrcholy); // zoradim monotonne
+        ArrayList<Vrchol> zoradene = monotonne.monotonneOcisluj(this.vrcholy);
         int[] zaciatok = new int[zoradene.size()];
         int[] koniec = new int[zoradene.size()];
         int[] trvanie = new int[zoradene.size()];
@@ -35,22 +34,19 @@ public class Graf {
 
             for (Hrana hrana : vrchol.getVychadzajuceHrany()) {
                 if (zaciatok[hrana.getV()] < zaciatok[hrana.getU()] + vrchol.getTrvanie()) {
-                    zaciatok[hrana.getV()] = zaciatok[hrana.getU()] + vrchol.getTrvanie(); // zmeni mi co je vacsie
+                    zaciatok[hrana.getV()] = zaciatok[hrana.getU()] + vrchol.getTrvanie();
                 }
             }
         }
 
         for (int i = 0; i < koniec.length; i++) {
-            // Davam tomu maximalnu dobu trvania
-            pocitadlo = Math.max(pocitadlo, zaciatok[i] + this.vrcholy.get(i).getTrvanie());
+            najvacsieTrvanie = Math.max(najvacsieTrvanie, zaciatok[i] + this.vrcholy.get(i).getTrvanie());
         }
 
         for (int i = 0; i < koniec.length; i++) {
-            // nastavim si trvanie projektu
-            koniec[i] = pocitadlo;
+            koniec[i] = najvacsieTrvanie;
         }
 
-        // idem od zadu lebo idem od poslednych cinnosti
         for (int i = zoradene.size() - 1; i >= 0; i--) {
             Vrchol vrchol = zoradene.get(i);
 
@@ -63,8 +59,8 @@ public class Graf {
 
         ArrayList<Integer> kritCesta = new ArrayList<>();
 
-        for (int i = 1; i < trvanie.length; i++) { // vypocitam casovu rezervu
-            rezerva[i] = koniec[i] - (zaciatok[i] + this.vrcholy.get(i).getTrvanie()); // k - (p+z)
+        for (int i = 1; i < trvanie.length; i++) {
+            rezerva[i] = koniec[i] - (zaciatok[i] + this.vrcholy.get(i).getTrvanie());
 
             if (rezerva[i] == 0) {
                 kritCesta.add(i);
@@ -72,7 +68,7 @@ public class Graf {
         }
 
 
-        System.out.println("Trvanie projektu: " + pocitadlo);
+        System.out.println("Trvanie projektu: " + najvacsieTrvanie);
 
         System.out.print("Kritická cesta: ");
         for (int i = 0; i < kritCesta.size(); i++) {
